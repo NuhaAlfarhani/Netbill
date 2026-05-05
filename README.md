@@ -1,8 +1,67 @@
-# Netbill
-Internet Billing App Using Mikrotik API
+# Netbill — Internet Billing Management System
 
-This app built using Laravel framework and Mazer Bootstrap template
+A web-based billing management system for internet service providers, integrated with the MikroTik API for automated network management.
 
+## 🛠️ Tech Stack
+
+- **Framework:** Laravel
+- **Frontend:** Mazer Bootstrap Template
+- **Database:** MySQL
+- **Integration:** MikroTik RouterOS API
+
+## ✨ Features
+
+- Customer & subscription management
+- Automated billing and invoice generation
+- MikroTik router integration (bandwidth control, user management)
+- Payment tracking and reporting dashboard
+
+## ⚙️ Installation
+
+1. **Clone the repository**
+```bash
+   git clone https://github.com/your-username/netbill.git
+   cd netbill
+```
+
+2. **Install dependencies**
+```bash
+   composer install
+   npm install && npm run build
+```
+
+3. **Environment setup**
+```bash
+   cp .env.example .env
+   php artisan key:generate
+```
+
+4. **Configure `.env`** — set your database and MikroTik credentials
+```env
+   DB_DATABASE=netbill
+   DB_USERNAME=root
+   DB_PASSWORD=
+
+   MIKROTIK_HOST=192.168.1.1
+   MIKROTIK_USER=admin
+   MIKROTIK_PASS=
+```
+
+5. **Run migrations**
+```bash
+   php artisan migrate --seed
+```
+
+6. **Serve the application**
+```bash
+   php artisan serve
+```
+
+## 📄 License
+
+This project is open-source and available under the [MIT License](LICENSE).
+
+##
 
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
