@@ -72,7 +72,7 @@
 
     <body>
         <script src="assets/static/js/initTheme.js"></script>
-        <!-- Sidebar -->
+        
         <div id="app">
             @include('layouts.sidebar')
 
