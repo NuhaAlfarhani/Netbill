@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('location_photo')->nullable();
             $table->text('gmap_link')->nullable();
             $table->date('subscription_start_date');
-            $table->string('package');
+            $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
             $table->string('status')->default('active');
             $table->decimal('longitude', 10, 8)->nullable();
             $table->decimal('latitude', 11, 8)->nullable();
