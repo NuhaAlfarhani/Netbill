@@ -55,8 +55,8 @@
                             </a>
                         </li>
                         
-                        <li class="sidebar-item {{ request()->routeIs('bills') ? 'active' : '' }} ">
-                            <a href="bills" class='sidebar-link'>
+                        <li class="sidebar-item {{ request()->routeIs('billing') ? 'active' : '' }} ">
+                            <a href="billing" class='sidebar-link'>
                                 <i class="bi bi-receipt"></i>
                                 <span>Tagihan</span>
                             </a>
