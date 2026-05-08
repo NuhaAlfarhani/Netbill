@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('gmap_link')->nullable();
             $table->date('subscription_start_date');
             $table->foreignId('package_id')->constrained('packages')->onDelete('cascade');
-            $table->string('status')->default('active');
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->decimal('longitude', 10, 8)->nullable();
             $table->decimal('latitude', 11, 8)->nullable();
             $table->timestamps();

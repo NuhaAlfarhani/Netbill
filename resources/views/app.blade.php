@@ -14,26 +14,20 @@
 
         <style>
             @media (min-width: 1200px) {
-                /* 1. Lebarkan sedikit mini sidebar agar logo asli bisa muat */
                 .sidebar-wrapper:not(.active) {
-                    width: 120px !important; /* Silakan sesuaikan angka ini jika logonya masih kurang lebar */
+                    width: 120px !important;
                     left: 0 !important; 
-                    /* overflow: hidden; <- Sengaja dihapus agar logo tidak terpotong paksa */
                 }
 
-                /* 2. FIX ICON TERPOTONG: Kurangi padding kiri-kanan bawaan Mazer yang terlalu besar */
                 .sidebar-wrapper:not(.active) .sidebar-menu {
                     padding: 0 1rem !important; 
                 }
 
-                /* 3. Sembunyikan teks menu, judul kategori, dan icon panah dropdown */
-                .sidebar-wrapper:not(.active) .sidebar-title,
                 .sidebar-wrapper:not(.active) .sidebar-link span,
                 .sidebar-wrapper:not(.active) .sidebar-item.has-sub .sidebar-link::after {
                     display: none !important;
                 }
 
-                /* 4. Pusatkan posisi icon di dalam kotak birunya */
                 .sidebar-wrapper:not(.active) .sidebar-item .sidebar-link {
                     justify-content: center;
                     padding-left: 0;
@@ -43,23 +37,42 @@
                     margin-right: 0 !important;
                 }
 
-                /* 5. Rapikan Header tanpa mengubah ukuran asli logo */
                 .sidebar-wrapper:not(.active) .sidebar-header .d-flex {
                     justify-content: center !important;
                 }
-                /* Sembunyikan toggle dark mode saat disusutkan */
+
                 .sidebar-wrapper:not(.active) .theme-toggle {
                     display: none !important; 
                 }
 
-                /* 6. Sembunyikan Submenu akordion */
                 .sidebar-wrapper:not(.active) .submenu {
                     display: none !important;
                 }
 
-                /* 7. Sesuaikan margin kiri konten utama dengan lebar mini sidebar yang baru */
                 #main.mini-width {
-                    margin-left: 120px !important; /* Angka ini harus sama dengan width di nomor 1 */
+                    margin-left: 120px !important;
+                }
+
+                .sidebar-wrapper:not(.active) .sidebar-item {
+                    margin-top: 0.7rem;
+                    margin-bottom: 0.7rem;
+                }
+
+                .sidebar-wrapper:not(.active) .sidebar-link {
+                    padding-top: 0.7rem !important;
+                    padding-bottom: 0.7rem !important;
+                }
+
+                .sidebar-wrapper:not(.active) .sidebar-title {
+                    display: block !important;
+                    text-align: center !important;
+                    font-size: 0.75rem !important;
+                    padding: 1.5rem 0 0.5rem 0 !important;
+                    margin: 0 !important;
+                    width: 100% !important;
+                    opacity: 0.7;
+                    letter-spacing: 1px;
+                    white-space: normal !important;
                 }
 
                 /* Transisi untuk animasi mulus */
@@ -88,30 +101,36 @@
         <script src="assets/static/js/components/dark.js"></script>
         <script src="assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js"></script>
         <script src="assets/compiled/js/app.js"></script>
-        
-        <!-- Need: Apexcharts -->
         <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
         <script src="assets/static/js/pages/dashboard.js"></script>
         @stack('scripts')
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const burgerBtn = document.querySelector('.burger-btn');
                 const sidebarWrapper = document.querySelector('.sidebar-wrapper');
                 const mainContent = document.getElementById('main');
 
-                if (burgerBtn && sidebarWrapper && mainContent) {
-                    burgerBtn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        
-                        // Toggle class 'active' bawaan Mazer
-                        sidebarWrapper.classList.toggle('active');
+                const togglers = document.querySelectorAll('.burger-btn, .sidebar-hide, .sidebar-toggler');
 
-                        // Sesuaikan margin main content dengan mode mini
-                        if (sidebarWrapper.classList.contains('active')) {
-                            mainContent.classList.remove('mini-width');
-                        } else {
-                            mainContent.classList.add('mini-width');
-                        }
+                if (localStorage.getItem('sidebarState') === 'collapsed') {
+                    if (sidebarWrapper) sidebarWrapper.classList.remove('active');
+                    if (mainContent) mainContent.classList.add('mini-width');
+                }
+
+                if (togglers.length > 0 && sidebarWrapper && mainContent) {
+                    togglers.forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.preventDefault();
+
+                            sidebarWrapper.classList.toggle('active');
+                            
+                            if (sidebarWrapper.classList.contains('active')) {
+                                mainContent.classList.remove('mini-width');
+                                localStorage.setItem('sidebarState', 'expanded');
+                            } else {
+                                mainContent.classList.add('mini-width');
+                                localStorage.setItem('sidebarState', 'collapsed');
+                            }
+                        });
                     });
                 }
             });
