@@ -30,8 +30,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-    Route::get('/customers', [CustomerController::class, 'index'])->name('customers');
-    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store')->middleware('can:customers.create');
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers')->middleware('can:customers.view');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store')->middleware('can:customers.store');
+    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update')->middleware('can:customers.update');
+    Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy')->middleware('can:customers.delete');
 
     Route::get('/packages', [PackageController::class, 'index'])->name('packages');
 

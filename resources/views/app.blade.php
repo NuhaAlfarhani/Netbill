@@ -88,7 +88,7 @@
         
         <div id="app">
             @include('layouts.sidebar')
-
+            
             <div id="main">
                 @include('layouts.navbar')
 

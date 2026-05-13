@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         
         $adminRole = Role::create([
-            'name' => 'admin'
+            'name' => 'Admin'
         ]);
 
         $admin = User::create([
@@ -30,5 +30,6 @@ class DatabaseSeeder extends Seeder
         $admin->roles()->attach($adminRole);
 
         $this->call(RolePermission::class);
+        $this->call(PackageSeeder::class);
     }
 }

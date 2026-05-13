@@ -23,10 +23,10 @@ class RolePermission extends Seeder
 
             // customers
             'customers.view',
-            'customers.create',
-            'customers.edit',
-            'customers.delete',
-            'customers.detail',
+            'customers.store',
+            'customers.update',
+            'customers.destroy',
+            'customers.show',
 
             // bills
             'bills.view',
@@ -74,18 +74,20 @@ class RolePermission extends Seeder
 
         // admin role
         $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        
         $adminRole->syncPermissions($permissions);
 
         // cashier role
         $cashierRole = Role::firstOrCreate(['name' => 'Cashier']);
+
         $cashierRole->syncPermissions([
             'dashboard.view',
 
             'customers.view',
-            'customers.create',
-            'customers.edit',
-            'customers.delete',
-            'customers.detail',
+            'customers.store',
+            'customers.update',
+            'customers.destroy',
+            'customers.show',
 
             'bills.view',
             'bills.create',

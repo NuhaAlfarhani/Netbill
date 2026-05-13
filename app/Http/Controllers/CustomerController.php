@@ -3,19 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Customer;
 
 class CustomerController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:customers.create')->only('store');
-        $this->middleware('can:customers.edit')->only('edit', 'update');
-        $this->middleware('can:customers.delete')->only('destroy');
-    }
-
     public function index()
     {
-        $customers = Customer::all();
+        // Bonus Tip: Gunakan with('package') agar query ke database jauh lebih cepat (Eager Loading)
+        $customers = Customer::with('package')->get();
         return view('customers.index', compact('customers'));
     }
 
@@ -30,7 +25,6 @@ class CustomerController extends Controller
             'gmap_link' => 'nullable|url',
             'subscription_start_date' => 'required|date',
             'package_id' => 'required|exists:packages,id',
-            'status' => 'required|in:active,inactive',
             'longitude' => 'nullable|numeric',
             'latitude' => 'nullable|numeric',
         ]);
@@ -44,18 +38,12 @@ class CustomerController extends Controller
             'gmap_link' => $request->gmap_link,
             'subscription_start_date' => $request->subscription_start_date,
             'package_id' => $request->package_id,
-            'status' => $request->status,
+            // Kolom status tidak perlu ditulis karena akan otomatis diisi 'active' oleh database
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
         ]);
-    
-        return redirect()->route('customers')->with('success', 'Pelanggan berhasil ditambahkan.');
-    }
 
-    public function edit($id)
-    {
-        $customer = Customer::findOrFail($id);
-        return view('customers.edit', compact('customer'));
+        return redirect()->route('customers')->with('success', 'Pelanggan berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
@@ -65,13 +53,13 @@ class CustomerController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:customers,email,' . $customer->id,
-            'phone' => 'required|string|numeric|max:20',
+            'phone' => 'required|string|numeric|max_digits:20', // Diperbaiki jadi max_digits
             'address' => 'required|string|max:255',
             'location_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'gmap_link' => 'nullable|url',
             'subscription_start_date' => 'required|date',
             'package_id' => 'required|exists:packages,id',
-            'status' => 'required|in:active,inactive',
+            // status dihapus karena form edit tidak mengirimkan data status
             'longitude' => 'nullable|numeric',
             'latitude' => 'nullable|numeric',
         ]);
@@ -85,7 +73,7 @@ class CustomerController extends Controller
             'gmap_link' => $request->gmap_link,
             'subscription_start_date' => $request->subscription_start_date,
             'package_id' => $request->package_id,
-            'status' => $request->status,
+            // status juga dihapus dari sini agar tidak menimpa dengan nilai null
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
         ]);
