@@ -8,15 +8,8 @@ class Package extends Model
 {
     protected $guarded = ['id'];
 
-    protected $fillable = [
-        'name',
-        'speed',
-        'price',
-        'description',
-    ];
-
     public function customers()
     {
-        return $this->hasMany(CustomersModel::class, 'package_id', 'id');
+        return $this->hasMany(Customer::class, 'package_id', 'id');
     }
 }

@@ -8,16 +8,6 @@ class Bill extends Model
 {
     protected $guarded = ['id'];
 
-    protected $fillable = [
-        'uuid',
-        'invoice',
-        'customer_id',
-        'period',
-        'package_id',
-        'amount',
-        'status',
-    ];
-
     public function customer()
     {
         return $this->belongsTo(CustomersModel::class, 'customer_id', 'id');
