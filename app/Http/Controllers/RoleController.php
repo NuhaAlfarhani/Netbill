@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class RolesController extends Controller
+class RoleController extends Controller
 {
     public function index()
     {
-        $roles = \App\Models\RolesModel::all();
+        $roles = \App\Models\Role::all();
         return view('roles.roles', compact('roles'));
     }
 }

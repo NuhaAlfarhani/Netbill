@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class PackagesModel extends Model
+class Package extends Model
 {
-    protected $table = 'packages';
-    protected $primaryKey = 'id';
+    protected $guarded = ['id'];
 
     protected $fillable = [
         'name',

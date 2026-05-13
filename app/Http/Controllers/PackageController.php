@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PackagesModel;
+use App\Models\Package;
 
-class PackagesController extends Controller
+class PackageController extends Controller
 {
     public function __construct()
     {
@@ -16,7 +16,7 @@ class PackagesController extends Controller
 
     public function index()
     {
-        $packages = PackagesModel::all();
+        $packages = Package::all();
         return view('packages.packages', compact('packages'));
     }
 
@@ -34,7 +34,7 @@ class PackagesController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        PackagesModel::create([
+        Package::create([
             'package' => $request->package,
             'speed' => $request->speed,
             'price' => $request->price,
@@ -46,13 +46,13 @@ class PackagesController extends Controller
 
     public function edit($id)
     {
-        $package = PackagesModel::findOrFail($id);
+        $package = Package::findOrFail($id);
         return view('packages.edit', compact('package'));
     }
 
     public function update(Request $request, $id)
     {
-        $package = PackagesModel::findOrFail($id);
+        $package = Package::findOrFail($id);
 
         $request->validate([
             'package' => 'required|string|max:255',
@@ -73,7 +73,7 @@ class PackagesController extends Controller
 
     public function destroy($id)
     {
-        $package = PackagesModel::findOrFail($id);
+        $package = Package::findOrFail($id);
         $package->delete();
         return redirect()->route('packages')->with('success', 'Paket berhasil dihapus.');
     }

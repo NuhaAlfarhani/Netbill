@@ -4,10 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class BillingModel extends Model
+class Bill extends Model
 {
-    protected $table = 'billing';
-    protected $primaryKey = 'id';
+    protected $guarded = ['id'];
 
     protected $fillable = [
         'uuid',

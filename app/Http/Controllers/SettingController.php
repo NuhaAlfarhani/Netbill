@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class SettingsController extends Controller
+class SettingController extends Controller
 {
     public function index()
     {
-        $settings = \App\Models\SettingsModel::all();
+        $settings = \App\Models\Setting::all();
         return view('settings.settings', compact('settings'));
     }
 }
