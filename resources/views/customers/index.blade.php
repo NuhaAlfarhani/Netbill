@@ -55,6 +55,12 @@
                                         </td>
                                         
                                         <td>
+                                            <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-link p-0 me-2 border-0 bg-transparent" title="Lihat Detail">
+                                            <span class="badge bg-light-primary">
+                                                <i class="bi bi-eye text-primary font-medium-2"></i>
+                                            </span>
+                                        </a>
+                                            
                                             <button class="btn btn-link p-0 me-2 border-0 bg-transparent btn-update-customer" type="button" title="Edit" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#updateCustomerModal"
@@ -159,6 +165,16 @@
                     }
                 });
             });
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const modalUpdateId = urlParams.get('modal_update');
+
+            if (modalUpdateId) {
+                const targetButton = document.querySelector(`.btn-update-customer[data-id="${modalUpdateId}"]`);
+                if (targetButton) {
+                    targetButton.click();
+                }
+            }
         });
     </script>
 @endsection

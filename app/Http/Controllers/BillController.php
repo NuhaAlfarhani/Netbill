@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Bill;
 
 class BillController extends Controller
 {
     public function index()
     {
-        $billing = \App\Models\Bill::with(['customer', 'package'])->get();
-        return view('billing.billing', compact('billing'));
+        $bills = Bill::with(['customer', 'package'])->get();
+        return view('bills.index', compact('bills'));
     }
 }
