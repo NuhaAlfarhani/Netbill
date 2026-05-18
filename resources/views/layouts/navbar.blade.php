@@ -13,16 +13,24 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent" style="justify-content: flex-end;">
                 <div class="dropdown">
                     <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="user-menu d-flex">
+                        <div class="user-menu d-flex align-items-center">
                             <div class="user-name text-end me-3">
                                 <h6 class="mb-0 text-gray-600">{{ auth()->user()->username }}</h6>
                                 <p class="mb-0 text-sm text-gray-600">{{ auth()->user()->getRoleNames()->first() ?? 'User' }}</p>
                             </div>
 
                             <div class="user-img d-flex align-items-center">
-                                <div class="avatar avatar-md">
-                                    <img src="{{ asset('assets/compiled/jpg/1.jpg') }}" alt="Avatar">
-                                </div>
+                                @if(auth()->user()->photo) 
+                                    <div class="avatar avatar-md">
+                                        <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="Avatar User" style="object-fit: cover;">
+                                    </div>
+                                @else
+                                    <div class="avatar avatar-md bg-primary rounded-circle shadow-sm" style="width: 40px; height: 40px; min-width: 40px;">
+                                        <span class="text-white fw-bold fs-5 w-100 h-100 text-center" style="line-height: 40px; display: inline-block;">
+                                            {{ strtoupper(substr(auth()->user()->username, 0, 1)) }}
+                                        </span>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </a>
