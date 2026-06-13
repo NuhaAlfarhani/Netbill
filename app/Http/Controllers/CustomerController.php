@@ -65,7 +65,7 @@ class CustomerController extends Controller
             'gmap_link' => 'nullable|url',
             'subscription_start_date' => 'required|date',
             'package_id' => 'required|exists:packages,id',
-            // status dihapus karena form edit tidak mengirimkan data status
+            'status' => 'required|in:active,inactive',
             'longitude' => 'nullable|numeric',
             'latitude' => 'nullable|numeric',
         ]);
@@ -79,7 +79,7 @@ class CustomerController extends Controller
             'gmap_link' => $request->gmap_link,
             'subscription_start_date' => $request->subscription_start_date,
             'package_id' => $request->package_id,
-            // status juga dihapus dari sini agar tidak menimpa dengan nilai null
+            'status' => $request->status,
             'longitude' => $request->longitude,
             'latitude' => $request->latitude,
         ]);

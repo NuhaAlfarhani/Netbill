@@ -7,74 +7,53 @@ use App\Models\Package;
 
 class PackageController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('can:packages.create')->only('create', 'store');
-        $this->middleware('can:packages.edit')->only('edit', 'update');
-        $this->middleware('can:packages.delete')->only('destroy');
-    }
-
     public function index()
     {
         $packages = Package::all();
-        return view('packages.packages', compact('packages'));
+        return view('packages.index', compact('packages'));
     }
 
-    public function create(Request $request)
+    public function create()
     {
         return view('packages.create');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'package' => 'required|string|max:255',
-            'speed' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:0',
+        $validated = $request->validate([
+            'package'     => 'required|string|max:255',
+            'speed'       => 'nullable|string|max:255',
+            'price'       => 'required|numeric|min:0',
             'description' => 'nullable|string',
         ]);
 
-        Package::create([
-            'package' => $request->package,
-            'speed' => $request->speed,
-            'price' => $request->price,
-            'description' => $request->description,
-        ]);
+        Package::create($validated);
     
-        return redirect()->route('packages')->with('success', 'Paket berhasil ditambahkan.');
+        return redirect()->route('packages.index')->with('success', 'Paket internet berhasil ditambahkan.');
     }
 
-    public function edit($id)
+    public function edit(Package $package)
     {
-        $package = Package::findOrFail($id);
         return view('packages.edit', compact('package'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Package $package)
     {
-        $package = Package::findOrFail($id);
-
-        $request->validate([
-            'package' => 'required|string|max:255',
-            'speed' => 'nullable|string|max:255',
-            'price' => 'required|numeric|min:0',
+        $validated = $request->validate([
+            'package'     => 'required|string|max:255',
+            'speed'       => 'nullable|string|max:255',
+            'price'       => 'required|numeric|min:0',
             'description' => 'nullable|string',
         ]);
 
-        $package->update([
-            'package' => $request->package,
-            'speed' => $request->speed,
-            'price' => $request->price,
-            'description' => $request->description,
-        ]);
+        $package->update($validated);
     
-        return redirect()->route('packages')->with('success', 'Paket berhasil diperbarui.');
+        return redirect()->route('packages.index')->with('success', 'Paket internet berhasil diperbarui.');
     }
 
-    public function destroy($id)
+    public function destroy(Package $package)
     {
-        $package = Package::findOrFail($id);
         $package->delete();
-        return redirect()->route('packages')->with('success', 'Paket berhasil dihapus.');
+        return redirect()->route('packages.index')->with('success', 'Paket internet berhasil dihapus.');
     }
 }

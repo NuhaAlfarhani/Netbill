@@ -1,9 +1,49 @@
-<div class="modal fade" id="addCustomerModal" tabindex="-1" aria-labelledby="addCustomerModalLabel" aria-hidden="true">
+<div class="modal fade" id="addBillModal" tabindex="-1" aria-labelledby="addBillModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="addCustomerModalLabel">Tambah Pelanggan Baru</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="dropdown d-inline-block">
+                <button class="btn btn-primary icon icon-left shadow-sm dropdown-toggle" type="button" id="dropdownManualBill" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                    <i class="bi bi-plus-lg"></i> Buat Tagihan Baru
+                </button>
+                
+                <div class="dropdown-menu dropdown-menu-end p-4 shadow-lg border-0" aria-labelledby="dropdownManualBill" style="width: 320px; border-radius: 12px;">
+                    <h6 class="text-uppercase fw-bold mb-4" style="font-size: 0.85rem; letter-spacing: 0.5px; color: #1e293b;">Pilih Periode</h6>
+                    
+                    <form action="{{ route('bills.generate') }}" method="POST">
+                        @csrf
+                        
+                        <div class="mb-3">
+                            <label class="form-label text-sm text-muted">Bulan</label>
+                            <select name="month" class="form-select bg-light border-0" required>
+                                @php $currentMonth = date('n'); @endphp
+                                <option value="1" {{ $currentMonth == 1 ? 'selected' : '' }}>Januari</option>
+                                <option value="2" {{ $currentMonth == 2 ? 'selected' : '' }}>Februari</option>
+                                <option value="3" {{ $currentMonth == 3 ? 'selected' : '' }}>Maret</option>
+                                <option value="4" {{ $currentMonth == 4 ? 'selected' : '' }}>April</option>
+                                <option value="5" {{ $currentMonth == 5 ? 'selected' : '' }}>Mei</option>
+                                <option value="6" {{ $currentMonth == 6 ? 'selected' : '' }}>Juni</option>
+                                <option value="7" {{ $currentMonth == 7 ? 'selected' : '' }}>Juli</option>
+                                <option value="8" {{ $currentMonth == 8 ? 'selected' : '' }}>Agustus</option>
+                                <option value="9" {{ $currentMonth == 9 ? 'selected' : '' }}>September</option>
+                                <option value="10" {{ $currentMonth == 10 ? 'selected' : '' }}>Oktober</option>
+                                <option value="11" {{ $currentMonth == 11 ? 'selected' : '' }}>November</option>
+                                <option value="12" {{ $currentMonth == 12 ? 'selected' : '' }}>Desember</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label text-sm text-muted">Tahun</label>
+                            <select name="year" class="form-select bg-light border-0" required>
+                                @php $currentYear = date('Y'); @endphp
+                                <option value="{{ $currentYear - 1 }}">{{ $currentYear - 1 }}</option>
+                                <option value="{{ $currentYear }}" selected>{{ $currentYear }}</option>
+                                <option value="{{ $currentYear + 1 }}">{{ $currentYear + 1 }}</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Proses Sekarang</button>
+                    </form>
+                </div>
             </div>
 
             <div class="modal-body">
@@ -18,23 +58,23 @@
                     </div>
                 @endif
                 
-                <form id="addCustomerForm" method="POST" action="{{ route('customers.store') }}" class="form form-horizontal" enctype="multipart/form-data">
+                <form id="addBillForm" method="POST" action="{{ route('bills.store') }}" class="form form-horizontal" enctype="multipart/form-data">
                     @csrf
                     <div class="form-body">
-                        <h6 class="text-primary mb-3">Informasi Pelanggan</h6>
+                        <h6 class="text-primary mb-3">Informasi Tagihan</h6>
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="name">Nama Pelanggan</label>
+                                <label for="name">Invoice</label>
                             </div>
                             <div class="col-md-8 form-group">
-                                <input type="text" id="name" class="form-control" name="name" placeholder="Masukkan nama pelanggan" required>
+                                <input type="text" id="name" class="form-control" name="name" required>
                             </div>
 
                             <div class="col-md-4">
-                                <label for="email">Email</label>
+                                <label for="customer">Pelanggan</label>
                             </div>
                             <div class="col-md-8 form-group">
-                                <input type="email" id="email" class="form-control" name="email" placeholder="Masukkan email pelanggan" required>
+                                <input type="text" id="customer" class="form-control" name="customer" placeholder="Masukkan nama pelanggan" required>
                             </div>
 
                             <div class="col-md-4">
@@ -92,8 +132,8 @@
                             </div>
                             <div class="col-md-8 form-group">
                                 <div class="input-group mb-2">
-                                    <input type="text" id="latitude" class="form-control" name="latitude" placeholder="Latitude" inputmode="decimal" onInput="this.value = this.value.replace(/[^0-9.-]/g, '')">
-                                    <input type="text" id="longitude" class="form-control" name="longitude" placeholder="Longitude" inputmode="decimal" onInput="this.value = this.value.replace(/[^0-9.-]/g, '')">
+                                    <input type="text" id="latitude" class="form-control" name="latitude" placeholder="Latitude">
+                                    <input type="text" id="longitude" class="form-control" name="longitude" placeholder="Longitude">
                                 </div>
 
                                 <button type="button" class="btn btn-sm btn-outline-info w-100" onclick="getCurrentLocation()">Gunakan Lokasi Saat Ini</button>
@@ -106,21 +146,6 @@
                             </div>
                             <div class="col-md-8 form-group">
                                 <input type="file" id="location_photo" class="form-control" name="location_photo" accept="image/*">
-                            </div>
-                        </div>
-
-                        <hr>
-
-                        <h6 class="text-primary mb-3 mt-4">Status Pelanggan</h6>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="status">Status</label>
-                            </div>
-                            <div class="col-md-8 form-group">
-                                <input type="hidden" name="status" value="active">
-                                <select id="status" class="form-control" disabled>
-                                    <option value="active" selected>Aktif</option>
-                                </select>
                             </div>
                         </div>
                     </div>

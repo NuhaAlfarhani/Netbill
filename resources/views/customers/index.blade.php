@@ -30,8 +30,16 @@
                                 @foreach ($customers as $customer)
                                     <tr>
                                         <td class="text-bold-500">
-                                            {{ $customer->name }}<br>
-                                            <small class="text-muted">{{ $customer->email }}</small>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="rounded-circle {{ $customer->status == 'active' ? 'bg-success' : 'bg-danger' }}" 
+                                                    style="width: 10px; height: 10px; display: inline-block;" 
+                                                    title="{{ $customer->status == 'active' ? 'Aktif' : 'Non-Aktif' }}">
+                                                </span>
+                                                
+                                                <div class="d-flex flex-column">
+                                                    <span>{{ $customer->name }}</span>
+                                                </div>
+                                            </div>
                                         </td>
                                         
                                         <td class="text-bold-500">
@@ -39,7 +47,11 @@
                                         </td>
                                         
                                         <td class="text-bold-500">
-                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $customer->phone) }}" target="_blank" class="me-2" title="Hubungi via WhatsApp">
+                                            @php
+                                                $pesanWA = urlencode("Halo Kak {$customer->name}, saya admin dari NetBill. Ingin menginformasikan terkait layanan internetnya...");
+                                            @endphp
+
+                                            <a href="https://wa.me/{{ preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $customer->phone)) }}?text={{ $pesanWA }}" target="_blank" class="me-2" title="Hubungi via WhatsApp">
                                                 <span class="badge bg-light-success">
                                                     <i class="bi-whatsapp text-success font-medium-2"></i>
                                                 </span>
@@ -56,10 +68,10 @@
                                         
                                         <td>
                                             <a href="{{ route('customers.show', $customer->id) }}" class="btn btn-link p-0 me-2 border-0 bg-transparent" title="Lihat Detail">
-                                            <span class="badge bg-light-primary">
-                                                <i class="bi bi-eye text-primary font-medium-2"></i>
-                                            </span>
-                                        </a>
+                                                <span class="badge bg-light-primary">
+                                                    <i class="bi bi-eye text-primary font-medium-2"></i>
+                                                </span>
+                                            </a>
                                             
                                             <button class="btn btn-link p-0 me-2 border-0 bg-transparent btn-update-customer" type="button" title="Edit" 
                                                 data-bs-toggle="modal" 

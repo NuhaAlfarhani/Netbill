@@ -77,6 +77,21 @@
                                 <small class="text-muted">Biarkan kosong jika tidak ingin mengubah foto.</small>
                             </div>
                         </div>
+
+                        <hr>
+
+                        <h6 class="text-primary mb-3 mt-4">Status Pelanggan</h6>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="status">Status</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <select id="status" class="form-control" name="status" required>
+                                    <option value="active">Aktif</option>
+                                    <option value="inactive">Tidak Aktif</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>

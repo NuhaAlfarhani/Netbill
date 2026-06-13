@@ -44,7 +44,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/bills', [BillController::class, 'index'])->name('bills')->middleware('can:bills.view');
     Route::post('/bills/generate', [BillController::class, 'generate'])->name('bills.generate')->middleware('can:bills.generate');
     Route::put('/bills/{bill}/pay', [BillController::class, 'pay'])->name('bills.pay')->middleware('can:bills.pay');
-    Route::put('/bills/{bill}', [BillController::class, 'print'])->name('bills.print')->middleware('can:bills.print');
+    Route::get('/bills/{bill}', [BillController::class, 'print'])->name('bills.print')->middleware('can:bills.print');
     Route::delete('/bills/{bill}', [BillController::class, 'destroy'])->name('bills.destroy')->middleware('can:bills.delete');
 
     // Mikrotik

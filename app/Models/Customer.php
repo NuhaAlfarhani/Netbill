@@ -12,6 +12,6 @@ class Customer extends Model
     use SoftDeletes;
 
     public function package(){
-        return $this->belongsTo(Package::class, 'package_id', 'id');
+        return $this->belongsTo(Package::class, 'package_id', 'id')->withTrashed();
     }
 }

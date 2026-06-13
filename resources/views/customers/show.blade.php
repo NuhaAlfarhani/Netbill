@@ -43,7 +43,10 @@
                                         <i class="bi bi-telephone me-1"></i> Kontak
                                     </span>
                                     <h6 class="mt-2 mb-1">{{ $customer->phone }}</h6>
-                                    <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $customer->phone) }}" target="_blank" class="text-success text-sm fw-bold">
+                                    @php
+                                        $pesanWA = urlencode("Halo Kak {$customer->name}, saya admin dari NetBill. Ingin menginformasikan terkait layanan internetnya...");
+                                    @endphp
+                                    <a href="https://wa.me/{{ preg_replace ('/^0/', '62', preg_replace('/[^0-9]/', '', $customer->phone)) }}?text={{ $pesanWA }}" target="_blank" class="text-success text-sm fw-bold">
                                         Chat WhatsApp &rarr;
                                     </a>
                                 </div>
@@ -64,7 +67,7 @@
                     <div class="card-body p-4 d-flex justify-content-between align-items-center">
                         <div>
                             <span class="text-white-50 text-uppercase font-bold" style="font-size: 0.75rem;">Paket Berlangganan</span>
-                            <h3 class="text-white mt-1 mb-1">{{ $customer->package->name ?? 'Belum ada paket' }}</h3>
+                            <h3 class="text-white mt-1 mb-1">{{ $customer->package->package ?? 'Belum ada paket' }}</h3>
                             <span class="badge bg-white text-primary">Up to {{ $customer->package->speed ?? '??' }} Mbps</span>
                         </div>
                         <div class="text-end">

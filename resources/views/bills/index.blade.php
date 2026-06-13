@@ -1,12 +1,76 @@
 @extends('app')
 
 @section('content')
-    <div class="page-heading d-flex justify-content-between align-items-center">
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-check-circle me-2"></i> {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i> {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    @if(session('info'))
+        <div class="alert alert-info alert-dismissible fade show shadow-sm" role="alert">
+            <i class="bi bi-info-circle me-2"></i> {{ session('info') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="page-heading d-flex justify-content-between align-items-center mb-4">
         <h3 class="mb-0">Data Tagihan Pelanggan</h3>
         
-        <button type="button" class="btn btn-primary icon icon-left shadow-sm" data-bs-toggle="modal" data-bs-target="#addBillModal">
-            <i class="bi bi-plus-lg"></i> Buat Invoice Manual
-        </button>
+        <!-- DROPDOWN BUAT TAGIHAN MANUAL DISINI -->
+        <div class="dropdown d-inline-block">
+            <button class="btn btn-primary icon icon-left shadow-sm dropdown-toggle" type="button" id="dropdownManualBill" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                <i class="bi bi-plus-lg"></i> Buat Tagihan Baru
+            </button>
+            
+            <div class="dropdown-menu dropdown-menu-end p-4 shadow-lg border-0" aria-labelledby="dropdownManualBill" style="width: 320px; border-radius: 12px;">
+                <h6 class="text-uppercase fw-bold mb-4" style="font-size: 0.85rem; letter-spacing: 0.5px; color: #1e293b;">Pilih Periode</h6>
+                
+                <form action="{{ route('bills.generate') }}" method="POST">
+                    @csrf
+                    
+                    <div class="mb-3">
+                        <label class="form-label text-sm text-muted">Bulan</label>
+                        <select name="month" class="form-select bg-light border-0" required>
+                            @php $currentMonth = date('n'); @endphp
+                            <option value="1" {{ $currentMonth == 1 ? 'selected' : '' }}>Januari</option>
+                            <option value="2" {{ $currentMonth == 2 ? 'selected' : '' }}>Februari</option>
+                            <option value="3" {{ $currentMonth == 3 ? 'selected' : '' }}>Maret</option>
+                            <option value="4" {{ $currentMonth == 4 ? 'selected' : '' }}>April</option>
+                            <option value="5" {{ $currentMonth == 5 ? 'selected' : '' }}>Mei</option>
+                            <option value="6" {{ $currentMonth == 6 ? 'selected' : '' }}>Juni</option>
+                            <option value="7" {{ $currentMonth == 7 ? 'selected' : '' }}>Juli</option>
+                            <option value="8" {{ $currentMonth == 8 ? 'selected' : '' }}>Agustus</option>
+                            <option value="9" {{ $currentMonth == 9 ? 'selected' : '' }}>September</option>
+                            <option value="10" {{ $currentMonth == 10 ? 'selected' : '' }}>Oktober</option>
+                            <option value="11" {{ $currentMonth == 11 ? 'selected' : '' }}>November</option>
+                            <option value="12" {{ $currentMonth == 12 ? 'selected' : '' }}>Desember</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label text-sm text-muted">Tahun</label>
+                        <select name="year" class="form-select bg-light border-0" required>
+                            @php $currentYear = date('Y'); @endphp
+                            <option value="{{ $currentYear - 1 }}">{{ $currentYear - 1 }}</option>
+                            <option value="{{ $currentYear }}" selected>{{ $currentYear }}</option>
+                            <option value="{{ $currentYear + 1 }}">{{ $currentYear + 1 }}</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 fw-bold py-2">Proses Sekarang</button>
+                </form>
+            </div>
+        </div>
     </div>
 
     <div class="card shadow-sm mb-4">
@@ -83,7 +147,7 @@
                         @foreach ($bills as $bill)
                             <tr>
                                 <td class="text-bold-500">
-                                    <span class="text-primary fw-bold">#{{ $bill->invoice_number ?? 'INV-'.$bill->id }}</span>
+                                    <span class="text-primary fw-bold">#{{ $bill->invoice ?? 'INV-'.$bill->id }}</span>
                                 </td>
                                 
                                 <td class="text-bold-500">
@@ -96,7 +160,7 @@
                                 </td>
                                 
                                 <td class="text-bold-500">
-                                    Rp{{ number_format($bill->amount ?? 0, 0, ',', '.') }}
+                                    Rp{{ number_format($bill->package->price ?? 0, 0, ',', '.') }}
                                 </td>
                                 
                                 <td class="text-bold-500">
@@ -111,7 +175,7 @@
                                     @if($bill->status != 'paid' && $bill->status != 'lunas')
                                         <form method="POST" action="{{ route('bills.pay', $bill->id) }}" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin mengubah status tagihan ini menjadi LUNAS?')">
                                             @csrf
-                                            @method('PATCH')
+                                            @method('PUT')
                                             <button type="submit" class="btn btn-link p-0 me-2 border-0 bg-transparent" title="Tandai Lunas">
                                                 <span class="badge bg-light-success">
                                                     <i class="bi bi-check-circle-fill text-success font-medium-2"></i>
