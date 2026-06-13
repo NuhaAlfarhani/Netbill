@@ -38,15 +38,14 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy')->middleware('can:customers.delete');
 
     // Packages
-    Route::get('/packages', [PackageController::class, 'index'])->name('packages');
+    Route::get('/packages', [PackageController::class, 'index'])->name('packages')->middleware('can:packages.view');
 
     // Bills
     Route::get('/bills', [BillController::class, 'index'])->name('bills')->middleware('can:bills.view');
-    Route::post('/bills', [BillController::class, 'store'])->name('bills.store')->middleware('can:bills.store');
+    Route::post('/bills/generate', [BillController::class, 'generate'])->name('bills.generate')->middleware('can:bills.generate');
+    Route::put('/bills/{bill}/pay', [BillController::class, 'pay'])->name('bills.pay')->middleware('can:bills.pay');
     Route::put('/bills/{bill}', [BillController::class, 'print'])->name('bills.print')->middleware('can:bills.print');
     Route::delete('/bills/{bill}', [BillController::class, 'destroy'])->name('bills.destroy')->middleware('can:bills.delete');
-    Route::put('/bills/{bill}/pay', [BillController::class, 'pay'])->name('bills.pay')->middleware('can:bills.pay');
-    Route::put('/bills/{bill}/print', [BillController::class, 'print'])->name('bills.print')->middleware('can:bills.print');
 
     // Mikrotik
     Route::get('/mikrotik', [MikrotikController::class, 'index'])->name('mikrotik');

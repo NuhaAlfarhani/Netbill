@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('invoice')->unique();
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->date('period');
@@ -21,6 +20,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 2);
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
